@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { frameworkThemes, useAppStore } from '../stores/appStore';
 import { Layers, Zap, GitCompare, Activity, Sun, Moon, ArrowRight, Sparkles } from 'lucide-react';
+import { OnboardingTrigger } from '../components/Onboarding';
 
 // Floating doodle SVGs
 const FloatingDoodles: FC = () => (
@@ -85,6 +86,7 @@ export const LandingPage: FC = () => {
           animate={{ x: 0, opacity: 1 }}
           className="flex items-center gap-4"
         >
+          <OnboardingTrigger />
           <Link to="/learn" className="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors hidden md:block">
             Learn
           </Link>

@@ -6,6 +6,7 @@ import { PlaygroundPage } from './pages/PlaygroundPage';
 import { StressTestPage } from './pages/StressTestPage';
 import { ComparePage } from './pages/ComparePage';
 import { LearnPage } from './pages/LearnPage';
+import { OnboardingProvider } from './components/Onboarding';
 
 function AppContent() {
   const { appTheme } = useAppStore();
@@ -28,7 +29,11 @@ function AppContent() {
 }
 
 function App() {
-  return <AppContent />;
+  return (
+    <OnboardingProvider>
+      <AppContent />
+    </OnboardingProvider>
+  );
 }
 
 export default App;

@@ -9,14 +9,14 @@ import { TreeVisualizer } from '../components/TreeVisualizer';
 import { CodePlayground } from '../components/CodePlayground';
 import { StatsPanel } from '../components/StatsPanel';
 import { FrameworkSelector } from '../components/FrameworkSelector';
-import { SkillLevelToggle } from '../components/SkillLevelToggle';
 import { CollapsiblePanel } from '../components/CollapsiblePanel';
 import { VNodeRenderer } from '../components/VNodeRenderer';
 import { scenarios, type Scenario } from '../utils/scenarios';
 import { 
   Activity, Home, Sun, Moon, Code, 
-  PlayCircle, FileText, MousePointerClick 
+  PlayCircle, FileText, MousePointerClick, Layers
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 // Adapt EngineStep to the old DiffStep format
@@ -33,14 +33,12 @@ export const PlaygroundPage: FC = () => {
   const theme = frameworkThemes[currentFramework];
 
   // Mode: 'code' (manual) or 'interact' (scenarios)
-  const [mode, setMode] = useState<'code' | 'interact'>('code');
+  const [mode, setMode] = useState<'code' | 'interact'>('interact');
   const [activeScenario, setActiveScenario] = useState<Scenario | null>(null);
 
   // Tree State
   const [oldTree, setOldTree] = useState<VNode>({ tag: 'div', children: [] });
   const [newTree, setNewTree] = useState<VNode>({ tag: 'div', children: [] });
-  // For interaction mode, we need a "display tree" which is what the user sees
-  // Initially it's oldTree. When interaction happens, we diff oldTree -> newTree
   const [displayTree, setDisplayTree] = useState<VNode>(oldTree);
 
   // Simulation State
@@ -65,10 +63,9 @@ export const PlaygroundPage: FC = () => {
   const selectScenario = useCallback((scenario: Scenario) => {
     setActiveScenario(scenario);
     setOldTree(scenario.initialTree);
-    setNewTree(scenario.finalTree); // Ready to be diffed
+    setNewTree(scenario.finalTree);
     setDisplayTree(scenario.initialTree);
     
-    // Reset Sim
     iteratorRef.current = null;
     setLogs([]);
     setStats({ patches: 0, mounts: 0, unmounts: 0, comparisons: 0 });
@@ -77,12 +74,9 @@ export const PlaygroundPage: FC = () => {
     isRunningRef.current = false;
   }, []);
 
-  // Handle Interaction Event (from VNodeRenderer)
-  const handleInteraction = useCallback((_tag: string, _props: any) => {
+  // Handle Interaction Event
+  const handleInteraction = useCallback(() => {
     if (mode === 'interact' && activeScenario && !isPlaying) {
-      // If we clicked the trigger (e.g. submit button), run the simulation
-      // For simplicity, ANY interactive click in the scenario triggers the diff for now
-      // Realistically we'd match ids, but let's keep it simple "Form Submit Scenario"
       startSimulation();
     }
   }, [mode, activeScenario, isPlaying]);
@@ -108,10 +102,8 @@ export const PlaygroundPage: FC = () => {
           isRunningRef.current = false;
           iteratorRef.current = null;
           setCurrentStep(null);
-          // Update display tree to final state
           setDisplayTree(newTree);
-          // And cycle old->new for next run?
-          setOldTree(newTree); // Next run starts from here
+          setOldTree(newTree);
           break;
         }
         if (value) {
@@ -142,18 +134,26 @@ export const PlaygroundPage: FC = () => {
   }, [oldTree, newTree]);
 
   return (
-    <div className="h-screen w-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden">
+    <div className="h-screen w-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 pattern-dots opacity-30 pointer-events-none z-0" />
+
       {/* Header */}
-      <header className="px-4 py-2 border-b flex items-center justify-between shrink-0 shadow-lg"
-        style={{ borderColor: `${theme.primary}30`, background: `linear-gradient(90deg, var(--bg-secondary), ${theme.primary}08)` }}>
+      <header className="relative z-10 px-6 py-4 flex items-center justify-between border-b border-[var(--border-primary)]">
         <div className="flex items-center gap-4">
-          <Link to="/" className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)]"><Home size={18} /></Link>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${theme.primary}20`, color: theme.primary }}>
-              <Activity size={18} />
+          <Link to="/" className="p-2 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish">
+            <Home size={18} className="text-[var(--text-muted)]" />
+          </Link>
+          <div className="flex items-center gap-3">
+            <div 
+              className="w-12 h-12 rounded-xl sketchy-border bg-[var(--bg-card)] flex items-center justify-center shadow-ink"
+              style={{ borderColor: `${theme.primary}40` }}
+            >
+              <Activity size={24} style={{ color: theme.primary }} />
             </div>
             <div>
-              <h1 className="text-sm font-bold" style={{ color: theme.primary }}>{theme.name} Playground</h1>
+              <h1 className="text-xl font-black font-hand" style={{ color: theme.primary }}>{theme.name} Playground</h1>
+              <p className="text-xs text-[var(--text-muted)]">Visualize VDOM diffing in real-time</p>
             </div>
           </div>
           <FrameworkSelector />
@@ -161,28 +161,41 @@ export const PlaygroundPage: FC = () => {
 
         <div className="flex items-center gap-3">
           {/* Mode Switcher */}
-          <div className="flex bg-[var(--bg-secondary)] p-1 rounded-lg border border-[var(--border-primary)]">
-            <button onClick={() => setMode('code')} className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${mode === 'code' ? 'bg-white shadow text-black' : 'text-gray-500'}`}>
+          <div className="flex bg-[var(--bg-card)] p-1 rounded-xl sketchy-border shadow-ink">
+            <button 
+              onClick={() => setMode('code')} 
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all btn-squish ${
+                mode === 'code' ? 'bg-[var(--accent-primary)] text-white shadow-md' : 'text-[var(--text-muted)]'
+              }`}
+            >
               <Code size={14} className="inline mr-1"/> Code
             </button>
-            <button onClick={() => setMode('interact')} className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${mode === 'interact' ? 'bg-white shadow text-black' : 'text-gray-500'}`}>
+            <button 
+              onClick={() => setMode('interact')} 
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all btn-squish ${
+                mode === 'interact' ? 'bg-[var(--accent-primary)] text-white shadow-md' : 'text-[var(--text-muted)]'
+              }`}
+            >
               <MousePointerClick size={14} className="inline mr-1"/> Interact
             </button>
           </div>
 
-          <SkillLevelToggle />
           <SimulationControls 
-            isPlaying={isPlaying} onPlay={startSimulation} onPause={() => { setIsPlaying(false); isRunningRef.current = false; }} 
-            onReset={() => {}} speed={speed} onSpeedChange={setSpeed} 
+            isPlaying={isPlaying} 
+            onPlay={startSimulation} 
+            onPause={() => { setIsPlaying(false); isRunningRef.current = false; }} 
+            onReset={() => {}} 
+            speed={speed} 
+            onSpeedChange={setSpeed} 
           />
-          <button onClick={toggleAppTheme} className="p-2 rounded-xl bg-[var(--bg-secondary)] border">
-            {appTheme === 'dark' ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} className="text-blue-400" />}
+          <button onClick={toggleAppTheme} className="p-3 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish">
+            {appTheme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-600" />}
           </button>
         </div>
       </header>
 
-      {/* Main Content: Collapsible Panels */}
-      <main className="flex-1 flex min-h-0 overflow-hidden relative">
+      {/* Main Content */}
+      <main className="relative z-10 flex-1 flex min-h-0 overflow-hidden">
         
         {/* LEFT PANEL: Input / Scenarios */}
         <CollapsiblePanel 
@@ -195,20 +208,27 @@ export const PlaygroundPage: FC = () => {
              <CodePlayground onCompile={(oldT, newT) => { setOldTree(oldT); setNewTree(newT); setDisplayTree(oldT); }} />
           ) : (
             <div className="p-4 space-y-3">
-              <p className="text-xs text-[var(--text-muted)] mb-2">Select a scenario to simulate:</p>
+              <p className="text-xs text-[var(--text-muted)] mb-2 font-hand">Select a scenario:</p>
               {scenarios.map(s => (
-                <button 
+                <motion.button 
                   key={s.id}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => selectScenario(s)}
-                  className={`w-full text-left p-3 rounded-xl border transition-all ${
+                  className={`w-full text-left p-3 rounded-xl sketchy-border transition-all shadow-ink card-lift ${
                     activeScenario?.id === s.id 
-                      ? 'bg-[var(--bg-secondary)] border-[var(--accent-primary)] shadow-md' 
-                      : 'border-[var(--border-primary)] hover:border-[var(--text-muted)]'
+                      ? 'bg-[var(--accent-primary)]/10 border-[var(--accent-primary)]' 
+                      : 'bg-[var(--bg-card)]'
                   }`}
                 >
-                  <div className="font-bold text-sm mb-1">{s.name}</div>
-                  <div className="text-xs text-[var(--text-secondary)]">{s.description}</div>
-                </button>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{s.icon}</span>
+                    <div>
+                      <div className="font-bold text-sm">{s.name}</div>
+                      <div className="text-xs text-[var(--text-muted)]">{s.description}</div>
+                    </div>
+                  </div>
+                </motion.button>
               ))}
             </div>
           )}
@@ -218,23 +238,36 @@ export const PlaygroundPage: FC = () => {
         <div className="flex-1 flex flex-col min-w-0 bg-[var(--bg-secondary)] relative">
           
           {/* Live Preview Bar (Interact Mode Only) */}
-          {mode === 'interact' && activeScenario && (
-            <div className="shrink-0 p-4 border-b bg-[var(--bg-primary)] flex justify-center shadow-sm z-10">
-              <div className="w-full max-w-md bg-white text-black rounded-lg shadow-sm border p-4 relative">
-                 <div className="absolute -top-3 left-3 bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase">
-                   Live Preview
-                 </div>
-                 {/* Render interactive VDOM */}
-                 <VNodeRenderer node={displayTree} onEvent={handleInteraction} />
-              </div>
-            </div>
-          )}
+          <AnimatePresence>
+            {mode === 'interact' && activeScenario && (
+              <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="shrink-0 p-4 border-b border-[var(--border-primary)] bg-[var(--bg-primary)] flex justify-center z-10"
+              >
+                <div className="w-full max-w-md bg-white text-black rounded-xl sketchy-border shadow-float p-4 relative">
+                   <div className="absolute -top-3 left-3 bg-[var(--accent-primary)] text-white px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase">
+                     Live Preview - Click to Trigger
+                   </div>
+                   <VNodeRenderer node={displayTree} onEvent={handleInteraction} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* Visualization Area */}
+          {/* Visualization Area with Enhanced Highlighting */}
           <div className="flex-1 relative overflow-hidden p-4">
-             <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full text-[10px] font-bold bg-white/50 backdrop-blur border shadow-sm">
-                Framework Strategy: <span style={{ color: theme.primary }}>{engineRef.current?.name}</span>
+             <div className="absolute top-4 left-4 z-10 px-3 py-2 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink flex items-center gap-2">
+                <Layers size={16} style={{ color: theme.primary }} />
+                <span className="text-xs font-bold">Engine: <span style={{ color: theme.primary }}>{engineRef.current?.name}</span></span>
              </div>
+             
+             {/* Highlight border when simulation is running */}
+             <div className={`absolute inset-4 rounded-2xl pointer-events-none transition-all duration-300 ${
+               isPlaying ? 'ring-4 ring-[var(--accent-primary)]/30 bg-[var(--accent-primary)]/5' : ''
+             }`} />
+             
              <TreeVisualizer currentStep={currentStep as any} tree={newTree} reset={logs.length === 0} />
           </div>
         </div>
@@ -248,7 +281,7 @@ export const PlaygroundPage: FC = () => {
         >
           <div className="flex flex-col h-full gap-4 p-4">
             <StatsPanel stats={stats} />
-            <div className="flex-1 min-h-0 border rounded-xl overflow-hidden shadow-inner bg-[var(--bg-primary)]">
+            <div className="flex-1 min-h-0 rounded-xl sketchy-border overflow-hidden shadow-ink bg-[var(--bg-card)]">
                <StepLog steps={logs as any} />
             </div>
           </div>
