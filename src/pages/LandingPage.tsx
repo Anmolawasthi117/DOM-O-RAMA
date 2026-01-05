@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { frameworkThemes, useAppStore } from '../stores/appStore';
-import { Layers, Zap, GitCompare, Activity, Sun, Moon, ArrowRight, Sparkles } from 'lucide-react';
+import { Zap, GitCompare, Activity, Sun, Moon, ArrowRight, Sparkles } from 'lucide-react';
 import { OnboardingTrigger } from '../components/Onboarding';
 import logo from '../assets/logo.png';
 
