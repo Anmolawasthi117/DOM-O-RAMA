@@ -201,3 +201,114 @@ h3,
     linear-gradient(90deg, var(--border-primary) 1px, transparent 1px);
   background-size: 40px 40px;
 }
+
+/* =========================================
+   MOBILE RESPONSIVE UTILITIES
+   ========================================= */
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  /* Smaller text on mobile */
+  .text-responsive {
+    font-size: 0.875rem;
+  }
+
+  /* Stack flex items on mobile */
+  .mobile-stack {
+    flex-direction: column;
+  }
+
+  /* Full width on mobile */
+  .mobile-full {
+    width: 100%;
+  }
+
+  /* Reduce padding on mobile */
+  .mobile-p-2 {
+    padding: 0.5rem;
+  }
+
+  /* Smaller gaps on mobile */
+  .mobile-gap-2 {
+    gap: 0.5rem;
+  }
+
+  /* Hide floating doodles on small screens */
+  .hide-on-small {
+    display: none;
+  }
+}
+
+/* Show only on mobile */
+@media (min-width: 769px) {
+  .show-mobile-only {
+    display: none !important;
+  }
+}
+
+/* Ensure touch targets are large enough */
+@media (max-width: 768px) {
+
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Scroll containers on mobile */
+  .mobile-scroll-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile-friendly collapsible panels */
+  .mobile-panel {
+    position: fixed;
+    z-index: 50;
+    background: var(--bg-primary);
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-panel-left {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    transform: translateX(-100%);
+  }
+
+  .mobile-panel-left.open {
+    transform: translateX(0);
+  }
+
+  .mobile-panel-right {
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    transform: translateX(100%);
+  }
+
+  .mobile-panel-right.open {
+    transform: translateX(0);
+  }
+
+  /* Mobile overlay */
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tablet-hidden {
+    display: none;
+  }
+}

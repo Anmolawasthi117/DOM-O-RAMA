@@ -172,17 +172,17 @@ export const ComparePage: FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col">
-      {/* Header */}
-      <header className="px-4 py-3 border-b border-[var(--border-primary)] flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      {/* Header - Mobile Responsive */}
+      <header className="px-3 md:px-4 py-3 border-b border-[var(--border-primary)] flex items-center justify-between">
+        <div className="flex items-center gap-2 md:gap-4">
           <Link to="/" className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
             <Home size={18} className="text-[var(--text-muted)]" />
           </Link>
           <div className="flex items-center gap-2">
-            <GitCompare size={24} className="text-[var(--accent-primary)]" />
+            <GitCompare size={20} className="text-[var(--accent-primary)]" />
             <div>
-              <h1 className="text-lg font-bold">Framework Comparison</h1>
-              <p className="text-[10px] text-[var(--text-muted)]">Side-by-side performance battle</p>
+              <h1 className="text-base md:text-lg font-bold">Framework Battle</h1>
+              <p className="text-[10px] text-[var(--text-muted)] hidden sm:block">Side-by-side comparison</p>
             </div>
           </div>
         </div>
@@ -194,9 +194,9 @@ export const ComparePage: FC = () => {
         </button>
       </header>
 
-      <main className="flex-1 p-6">
-        {/* Framework Selectors */}
-        <div className="flex items-center justify-center gap-8 mb-8">
+      <main className="flex-1 p-3 md:p-6 overflow-auto">
+        {/* Framework Selectors - Stack on mobile */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-6 md:mb-8">
           <FrameworkPicker 
             selected={leftFramework} 
             onChange={setLeftFramework} 
@@ -204,7 +204,7 @@ export const ComparePage: FC = () => {
             disabled={isRunning}
           />
           
-          <div className="text-4xl font-black text-[var(--text-muted)]">VS</div>
+          <div className="text-2xl md:text-4xl font-black text-[var(--text-muted)]">VS</div>
           
           <FrameworkPicker 
             selected={rightFramework} 
@@ -215,15 +215,15 @@ export const ComparePage: FC = () => {
         </div>
 
         {/* Run Button */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-6 md:mb-8">
           {!isRunning ? (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={runComparison}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg shadow-xl"
+              className="flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-2xl bg-gradient-to-br from-[var(--accent-primary)] via-blue-500 to-[var(--accent-secondary)]  text-white font-bold text-base md:text-lg shadow-xl"
             >
-              <Play size={24} fill="currentColor" />
+              <Play size={20} fill="currentColor" />
               START BATTLE!
             </motion.button>
           ) : (
@@ -231,16 +231,16 @@ export const ComparePage: FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={stopComparison}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-red-500 text-white font-bold text-lg"
+              className="flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-2xl bg-red-500 text-white font-bold text-base md:text-lg"
             >
-              <Square size={24} fill="currentColor" />
+              <Square size={20} fill="currentColor" />
               STOP
             </motion.button>
           )}
         </div>
 
-        {/* Results Grid */}
-        <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {/* Results Grid - Stack on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-5xl mx-auto">
           <ResultCard 
             result={leftResult}
             theme={leftTheme}

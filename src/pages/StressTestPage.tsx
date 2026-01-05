@@ -125,39 +125,46 @@ export const StressTestPage: FC = () => {
         <polygon points="50,5 95,40 80,95 20,95 5,40" stroke="currentColor" strokeWidth="3" fill="none" strokeLinejoin="round" />
       </svg>
 
-      {/* Header */}
-      <header className="relative z-10 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      {/* Header - Mobile Responsive */}
+      <header className="relative z-10 px-3 md:px-6 py-3 md:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 md:gap-4">
           <Link to="/" className="p-2 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish">
             <Home size={18} className="text-[var(--text-muted)]" />
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <div 
-              className="w-12 h-12 rounded-xl sketchy-border bg-[var(--bg-card)] flex items-center justify-center shadow-ink"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-xl sketchy-border bg-[var(--bg-card)] flex items-center justify-center shadow-ink"
               style={{ borderColor: `${theme.primary}40` }}
             >
-              <Gauge size={24} style={{ color: theme.primary }} />
+              <Gauge size={20} style={{ color: theme.primary }} />
             </div>
             <div>
-              <h1 className="text-xl font-black font-hand" style={{ color: theme.primary }}>Stress Test Arena</h1>
-              <p className="text-xs text-[var(--text-muted)]">Push {theme.name} to its limits</p>
+              <h1 className="text-lg md:text-xl font-black font-hand" style={{ color: theme.primary }}>Stress Test</h1>
+              <p className="text-[10px] md:text-xs text-[var(--text-muted)] hidden sm:block">Push {theme.name} to its limits</p>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <FrameworkSelector />
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="hidden sm:block">
+            <FrameworkSelector />
+          </div>
           <button
             onClick={toggleAppTheme}
-            className="p-3 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish"
+            className="p-2 md:p-3 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish"
           >
             {appTheme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-600" />}
           </button>
         </div>
       </header>
 
-      <main className="relative z-10 flex-1 p-6 flex gap-6">
+      {/* Mobile Framework Selector */}
+      <div className="sm:hidden relative z-10 px-3 py-2 border-b border-[var(--border-primary)] bg-[var(--bg-secondary)]">
+        <FrameworkSelector />
+      </div>
+
+      <main className="relative z-10 flex-1 p-3 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 overflow-auto">
         {/* Test Selector */}
-        <section className="w-80 shrink-0">
+        <section className="w-full md:w-80 shrink-0">
           <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mb-4 font-hand">Select Test</h2>
           <div className="space-y-3">
             {stressTests.map((test) => (
