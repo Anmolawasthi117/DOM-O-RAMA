@@ -79,7 +79,7 @@ export const LearnPage: FC = () => {
               <BookOpen size={24} className="text-[var(--accent-primary)]" />
             </div>
             <div>
-              <h1 className="text-xl font-black font-hand text-[var(--accent-primary)]">Learning Center</h1>
+              <h1 className="text-xl font-black font-body text-[var(--accent-primary)]">Learning Center</h1>
               <p className="text-xs text-[var(--text-muted)]">Master frameworks from first principles</p>
             </div>
           </div>
