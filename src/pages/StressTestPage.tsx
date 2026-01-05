@@ -44,7 +44,7 @@ export const StressTestPage: FC = () => {
     const test = stressTests.find(t => t.type === selectedTest);
     if (!test) return;
 
-    const engine = getEngine(currentFramework, Math.max(speed / 10, 10)); // Faster for stress tests
+    const engine = getEngine(currentFramework, Math.max(speed / 10, 10));
     const oldTree = test.generateOldTree();
     const newTree = test.generateNewTree();
 
@@ -80,7 +80,6 @@ export const StressTestPage: FC = () => {
             return updated;
           });
 
-          // Log every 100th operation
           if (opCount % 100 === 0) {
             setLogs(prev => [...prev.slice(-20), `📊 ${opCount} ops processed...`]);
           }
@@ -114,26 +113,34 @@ export const StressTestPage: FC = () => {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 pattern-dots opacity-30 pointer-events-none" />
+      
+      {/* Floating Doodles */}
+      <svg className="absolute top-20 right-10 w-24 h-24 text-[var(--accent-secondary)] opacity-20 animate-pulse" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="10 8" />
+      </svg>
+      <svg className="absolute bottom-40 left-10 w-20 h-20 text-[var(--accent-primary)] opacity-15" viewBox="0 0 100 100">
+        <polygon points="50,5 95,40 80,95 20,95 5,40" stroke="currentColor" strokeWidth="3" fill="none" strokeLinejoin="round" />
+      </svg>
+
       {/* Header */}
-      <header 
-        className="px-4 py-3 border-b flex items-center justify-between shrink-0"
-        style={{ borderColor: `${theme.primary}30` }}
-      >
+      <header className="relative z-10 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/" className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
+          <Link to="/" className="p-2 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish">
             <Home size={18} className="text-[var(--text-muted)]" />
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div 
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: `${theme.primary}20`, color: theme.primary }}
+              className="w-12 h-12 rounded-xl sketchy-border bg-[var(--bg-card)] flex items-center justify-center shadow-ink"
+              style={{ borderColor: `${theme.primary}40` }}
             >
-              <Gauge size={18} />
+              <Gauge size={24} style={{ color: theme.primary }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: theme.primary }}>Stress Test Arena</h1>
-              <p className="text-[10px] text-[var(--text-muted)]">Push your framework to the limit</p>
+              <h1 className="text-xl font-black font-hand" style={{ color: theme.primary }}>Stress Test Arena</h1>
+              <p className="text-xs text-[var(--text-muted)]">Push {theme.name} to its limits</p>
             </div>
           </div>
         </div>
@@ -141,17 +148,17 @@ export const StressTestPage: FC = () => {
           <FrameworkSelector />
           <button
             onClick={toggleAppTheme}
-            className="p-2 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)]"
+            className="p-3 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish"
           >
-            {appTheme === 'dark' ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} />}
+            {appTheme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-600" />}
           </button>
         </div>
       </header>
 
-      <main className="flex-1 p-6 flex gap-6">
+      <main className="relative z-10 flex-1 p-6 flex gap-6">
         {/* Test Selector */}
         <section className="w-80 shrink-0">
-          <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wider mb-4">Select Test</h2>
+          <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mb-4 font-hand">Select Test</h2>
           <div className="space-y-3">
             {stressTests.map((test) => (
               <motion.button
@@ -159,10 +166,10 @@ export const StressTestPage: FC = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedTest(test.type)}
-                className={`w-full p-4 rounded-xl border text-left transition-all ${
+                className={`w-full p-4 rounded-xl sketchy-border text-left transition-all shadow-ink card-lift ${
                   selectedTest === test.type
                     ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/10'
-                    : 'border-[var(--border-primary)] bg-[var(--bg-secondary)] hover:border-[var(--border-secondary)]'
+                    : 'bg-[var(--bg-card)]'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -177,27 +184,27 @@ export const StressTestPage: FC = () => {
           </div>
 
           {/* Run/Stop Buttons */}
-          <div className="mt-6 flex gap-3">
+          <div className="mt-6">
             {metrics.status !== 'running' ? (
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={runTest}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-bold shadow-lg"
-                style={{ background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})` }}
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-bold shadow-float btn-squish"
+                style={{ backgroundColor: theme.primary }}
               >
-                <Play size={18} fill="currentColor" />
+                <Play size={20} fill="currentColor" />
                 Run Test
               </motion.button>
             ) : (
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={stopTest}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500 text-white font-bold"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-rose-500 text-white font-bold shadow-float btn-squish"
               >
-                <Square size={18} fill="currentColor" />
-                Stop
+                <Square size={20} fill="currentColor" />
+                Stop Test
               </motion.button>
             )}
           </div>
@@ -207,19 +214,19 @@ export const StressTestPage: FC = () => {
         <section className="flex-1">
           <div className="grid grid-cols-3 gap-4 mb-6">
             <MetricCard 
-              icon={<Zap size={20} />}
-              label="Total Operations"
+              icon={<Zap size={24} />}
+              label="Total Ops"
               value={metrics.totalOps.toLocaleString()}
               color={theme.primary}
             />
             <MetricCard 
-              icon={<Clock size={20} />}
+              icon={<Clock size={24} />}
               label="Duration"
               value={`${duration}s`}
               color="#10b981"
             />
             <MetricCard 
-              icon={<Flame size={20} />}
+              icon={<Flame size={24} />}
               label="Ops/Second"
               value={opsPerSecond.toLocaleString()}
               color="#f59e0b"
@@ -240,18 +247,18 @@ export const StressTestPage: FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className={`p-4 rounded-xl border flex items-center gap-3 mb-6 ${
+              className={`p-4 rounded-xl sketchy-border flex items-center gap-3 mb-6 shadow-ink ${
                 metrics.status === 'running' ? 'border-amber-500/30 bg-amber-500/10' :
                 metrics.status === 'complete' ? 'border-emerald-500/30 bg-emerald-500/10' :
                 metrics.status === 'error' ? 'border-red-500/30 bg-red-500/10' :
-                'border-[var(--border-primary)] bg-[var(--bg-secondary)]'
+                'bg-[var(--bg-card)]'
               }`}
             >
               {metrics.status === 'running' && <Gauge size={20} className="text-amber-400 animate-spin" />}
               {metrics.status === 'complete' && <CheckCircle size={20} className="text-emerald-400" />}
               {metrics.status === 'error' && <AlertTriangle size={20} className="text-red-400" />}
               {metrics.status === 'idle' && <Gauge size={20} className="text-[var(--text-muted)]" />}
-              <span className="font-semibold">
+              <span className="font-bold">
                 {metrics.status === 'running' && `Running ${currentTest?.name}...`}
                 {metrics.status === 'complete' && `${currentTest?.name} Complete!`}
                 {metrics.status === 'error' && 'Test Failed'}
@@ -261,8 +268,8 @@ export const StressTestPage: FC = () => {
           </AnimatePresence>
 
           {/* Live Log */}
-          <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-primary)] p-4 h-64 overflow-auto">
-            <h3 className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3">Live Log</h3>
+          <div className="bg-[var(--bg-card)] rounded-xl sketchy-border p-4 h-64 overflow-auto shadow-ink">
+            <h3 className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3 font-hand">Live Log</h3>
             <div className="space-y-1 font-mono text-xs">
               {logs.map((log, i) => (
                 <div key={i} className="text-[var(--text-secondary)]">{log}</div>
@@ -282,21 +289,21 @@ const MetricCard: FC<{ icon: React.ReactNode; label: string; value: string; colo
   icon, label, value, color 
 }) => (
   <div 
-    className="p-4 rounded-xl border"
-    style={{ borderColor: `${color}30`, backgroundColor: `${color}08` }}
+    className="p-5 rounded-xl sketchy-border shadow-ink card-lift"
+    style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
   >
     <div className="flex items-center gap-2 mb-2" style={{ color }}>
       {icon}
-      <span className="text-xs font-semibold uppercase tracking-wider">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider font-hand">{label}</span>
     </div>
     <div className="text-3xl font-black" style={{ color }}>{value}</div>
   </div>
 );
 
 const SmallMetric: FC<{ label: string; value: number; color: string }> = ({ label, value, color }) => (
-  <div className="p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-primary)]">
-    <div className="text-xs text-[var(--text-muted)] mb-1">{label}</div>
-    <div className="text-xl font-bold" style={{ color }}>{value.toLocaleString()}</div>
+  <div className="p-4 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink">
+    <div className="text-xs text-[var(--text-muted)] mb-1 font-hand">{label}</div>
+    <div className="text-xl font-black" style={{ color }}>{value.toLocaleString()}</div>
   </div>
 );
 

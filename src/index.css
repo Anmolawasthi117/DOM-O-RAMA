@@ -1,30 +1,153 @@
-
 @import "tailwindcss";
 
+/* =========================================
+   EXCALIDRAW-INSPIRED DESIGN SYSTEM
+   ========================================= */
+
+/* Typography */
 :root {
-  /* Default Light Theme */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --border-primary: #e2e8f0;
-  --accent-primary: #6366f1;
+  --font-hand: 'Caveat', cursive;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* =========================================
+   LIGHT THEME - Warm, Paper-like
+   ========================================= */
+:root {
+  --bg-primary: #FEFEFE;
+  --bg-secondary: #F8F6F4;
+  --bg-tertiary: #F0EDE8;
+  --bg-card: #FFFFFF;
+
+  --text-primary: #1E1E1E;
+  --text-secondary: #4A4A4A;
+  --text-muted: #8B8B8B;
+
+  --border-primary: #E0DCD4;
+  --border-secondary: #D0C9BE;
+
+  --accent-primary: #6965DB;
+  --accent-secondary: #E07E74;
+  --accent-success: #5DB075;
+  --accent-warning: #F5A623;
+
+  /* Sketchy/Hand-drawn effects */
+  --shadow-sketch:
+    2px 2px 0 rgba(0, 0, 0, 0.04),
+    4px 4px 0 rgba(0, 0, 0, 0.02);
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================
+   DARK THEME - Deep, Cozy
+   ========================================= */
 [data-theme='dark'] {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
-  --border-primary: #334155;
-  --accent-primary: #818cf8;
+  --bg-primary: #1E1E2E;
+  --bg-secondary: #27273A;
+  --bg-tertiary: #313147;
+  --bg-card: #2A2A3D;
+
+  --text-primary: #F5F5F7;
+  --text-secondary: #B8B8C7;
+  --text-muted: #6B6B80;
+
+  --border-primary: #3D3D54;
+  --border-secondary: #4A4A66;
+
+  --accent-primary: #A7A5FF;
+  --accent-secondary: #FF8A75;
+  --accent-success: #7EE0A0;
+  --accent-warning: #FFBC5E;
+
+  --shadow-sketch:
+    2px 2px 0 rgba(0, 0, 0, 0.2),
+    4px 4px 0 rgba(0, 0, 0, 0.1);
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* React Flow Styles */
+/* =========================================
+   BASE STYLES
+   ========================================= */
+* {
+  font-family: var(--font-body);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hand-drawn headings */
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+h1,
+h2,
+h3,
+.heading {
+  font-family: var(--font-body);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* =========================================
+   SKETCHY COMPONENTS
+   ========================================= */
+.sketchy-border {
+  border: 2px solid var(--border-primary);
+  border-radius: 8px;
+  position: relative;
+}
+
+.sketchy-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 10px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Ink-bleed shadow */
+.shadow-ink {
+  box-shadow: var(--shadow-sketch);
+}
+
+/* Float shadow */
+.shadow-float {
+  box-shadow: var(--shadow-float);
+}
+
+/* =========================================
+   MICRO-INTERACTIONS
+   ========================================= */
+.btn-squish {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-squish:hover {
+  transform: translateY(-2px);
+}
+
+.btn-squish:active {
+  transform: scale(0.96) translateY(0);
+}
+
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px) rotate(-0.5deg);
+  box-shadow: var(--shadow-float);
+}
+
+/* =========================================
+   REACT FLOW OVERRIDES
+   ========================================= */
 .react-flow__node {
   border: none;
   background: transparent;
@@ -41,21 +164,40 @@
   height: 6px;
 }
 
-/* Scrollbar */
+/* =========================================
+   SCROLLBAR - Sketchy Style
+   ========================================= */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary); 
+  background: var(--bg-secondary);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-primary); 
-  border-radius: 4px;
+  background: var(--border-primary);
+  border-radius: 10px;
+  border: 2px solid var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted); 
+  background: var(--text-muted);
+}
+
+/* =========================================
+   ANIMATED BACKGROUND PATTERN
+   ========================================= */
+.pattern-dots {
+  background-image: radial-gradient(var(--border-primary) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.pattern-grid {
+  background-image:
+    linear-gradient(var(--border-primary) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-primary) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
