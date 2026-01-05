@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { frameworkThemes, useAppStore } from '../stores/appStore';
 import { Layers, Zap, GitCompare, Activity, Sun, Moon, ArrowRight, Sparkles } from 'lucide-react';
 import { OnboardingTrigger } from '../components/Onboarding';
+import logo from '../assets/logo.png';
 
 // Floating doodle SVGs
 const FloatingDoodles: FC = () => (
@@ -41,7 +42,7 @@ const AnimatedTitle: FC = () => {
       {text.split('').map((char, i) => (
         <motion.span
           key={i}
-          className="inline-block bg-clip-text text-transparent bg-gradient-to-br from-[var(--accent-primary)] via-purple-500 to-[var(--accent-secondary)]"
+          className="inline-block bg-clip-text text-transparent bg-gradient-to-br from-[var(--accent-primary)] via-blue-500 to-[var(--accent-secondary)]"
           initial={{ y: 50, opacity: 0, rotate: -10 }}
           animate={{ y: 0, opacity: 1, rotate: 0 }}
           transition={{ 
@@ -73,12 +74,10 @@ export const LandingPage: FC = () => {
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="flex items-center gap-3"
+          className="relative flex items-center justify-center"
         >
-          <div className="w-12 h-12 rounded-xl sketchy-border bg-[var(--bg-card)] flex items-center justify-center shadow-ink">
-            <Layers size={24} className="text-[var(--accent-primary)]" />
-          </div>
-          <span className="text-2xl font-black tracking-tight font-hand text-[var(--text-primary)]">DOM-O-RAMA</span>
+          <img src={logo} alt="DOM-O-RAMA" className="h-20 w-auto" />
+          
         </motion.div>
         
         <motion.div 
@@ -202,7 +201,17 @@ export const LandingPage: FC = () => {
 
       {/* Footer */}
       <footer className="relative z-10 text-center py-8 text-[var(--text-muted)] text-sm">
-        <p className="font-hand">Built for visual learners 🎨</p>
+        <p className="font-hand">
+          Built for visual learners by{' '}
+          <a 
+            href="https://www.linkedin.com/in/anmol-awasthi11117/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-[var(--accent-primary)] transition-colors underline underline-offset-4"
+          >
+            Anmol
+          </a> 🎨
+        </p>
       </footer>
 
       {/* CSS for floating animation */}

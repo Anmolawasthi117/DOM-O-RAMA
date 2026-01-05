@@ -28,7 +28,7 @@ export const SimulationControls: FC<SimulationControlsProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9 }}
             onClick={onPlay}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white px-4 py-1.5 rounded-lg font-bold text-xs transition-all shadow-lg hover:opacity-90"
+            className="flex items-center gap-1.5  text-white px-4 py-1.5 rounded-lg font-bold text-xs transition-all shadow-lg hover:opacity-90"
           >
             <Play size={14} fill="currentColor" />
             RUN
