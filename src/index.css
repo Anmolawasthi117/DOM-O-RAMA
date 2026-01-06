@@ -306,9 +306,511 @@ h3,
   }
 }
 
-/* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
   .tablet-hidden {
     display: none;
+  }
+}
+
+/* =========================================
+   SHEPHERD.JS TOUR STYLING
+   Excalidraw-Inspired Sketchy Theme
+   ========================================= */
+
+/* Custom theme container */
+.shepherd-theme-custom {
+  font-family: var(--font-body);
+}
+
+/* Modal overlay - subtle paper texture feel */
+.shepherd-modal-overlay-container {
+  fill: rgba(30, 30, 30, 0.65);
+}
+
+[data-theme='dark'] .shepherd-modal-overlay-container {
+  fill: rgba(0, 0, 0, 0.8);
+}
+
+/* Tour element (tooltip) - Sketchy card style */
+.shepherd-element {
+  background: var(--bg-card);
+  border: 2.5px solid var(--border-secondary);
+  border-radius: 12px;
+  box-shadow:
+    var(--shadow-sketch),
+    0 12px 40px rgba(0, 0, 0, 0.12);
+  max-width: 400px;
+  z-index: 9999;
+  position: relative;
+  overflow: visible;
+}
+
+/* Sketchy double-border effect */
+.shepherd-element::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1.5px solid var(--border-primary);
+  border-radius: 16px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Subtle inner glow */
+.shepherd-element::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%);
+  pointer-events: none;
+}
+
+[data-theme='dark'] .shepherd-element {
+  box-shadow:
+    var(--shadow-sketch),
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  border-color: var(--border-secondary);
+  background: var(--bg-card);
+}
+
+/* Dark theme: enhanced outer border glow */
+[data-theme='dark'] .shepherd-element::before {
+  border-color: var(--accent-primary);
+  opacity: 0.2;
+}
+
+/* Dark theme: subtle top highlight */
+[data-theme='dark'] .shepherd-element::after {
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      transparent 30%);
+}
+
+/* Dark theme: arrow styling */
+[data-theme='dark'] .shepherd-arrow {
+  border-color: var(--border-secondary);
+}
+
+/* Dark theme: close button */
+[data-theme='dark'] .shepherd-cancel-icon {
+  color: var(--text-muted);
+}
+
+[data-theme='dark'] .shepherd-cancel-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-secondary);
+  color: var(--accent-secondary);
+}
+
+/* Dark theme: content styling */
+[data-theme='dark'] .shepherd-content-custom h3 {
+  color: var(--accent-primary);
+  text-shadow: 0 0 30px rgba(167, 165, 255, 0.3);
+}
+
+[data-theme='dark'] .shepherd-content-custom h3::after {
+  opacity: 0.7;
+  background: linear-gradient(90deg, var(--accent-secondary) 0%, transparent 100%);
+}
+
+[data-theme='dark'] .shepherd-content-custom strong {
+  background: linear-gradient(180deg, transparent 60%, rgba(167, 165, 255, 0.2) 60%);
+}
+
+/* Dark theme: bullet points glow */
+[data-theme='dark'] .shepherd-content-custom li::before {
+  opacity: 1;
+  text-shadow: 0 0 8px var(--accent-secondary);
+}
+
+/* Dark theme: footer divider */
+[data-theme='dark'] .shepherd-footer::before {
+  background: repeating-linear-gradient(90deg,
+      var(--border-secondary) 0px,
+      var(--border-secondary) 8px,
+      transparent 8px,
+      transparent 12px);
+  opacity: 0.6;
+}
+
+/* Dark theme: primary button */
+[data-theme='dark'] .shepherd-button {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow:
+    3px 3px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 20px rgba(167, 165, 255, 0.2);
+}
+
+[data-theme='dark'] .shepherd-button:hover {
+  box-shadow:
+    5px 5px 0 rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(167, 165, 255, 0.3);
+  filter: brightness(1.15);
+}
+
+/* Dark theme: secondary button */
+[data-theme='dark'] .shepherd-button.shepherd-button-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-secondary);
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .shepherd-button.shepherd-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Dark theme: target highlight */
+[data-theme='dark'] .shepherd-target {
+  outline-color: var(--accent-primary) !important;
+  box-shadow: 0 0 20px rgba(167, 165, 255, 0.3);
+}
+
+/* Arrow - Sketchy pointer */
+.shepherd-arrow,
+.shepherd-arrow::before {
+  background: var(--bg-card);
+  border: none;
+}
+
+.shepherd-arrow {
+  border: 2.5px solid var(--border-secondary);
+  border-radius: 2px;
+}
+
+/* Header */
+.shepherd-header {
+  background: transparent;
+  padding: 0;
+}
+
+.shepherd-title {
+  display: none;
+}
+
+/* Cancel button (X) - Sketchy close button */
+.shepherd-cancel-icon {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  font-weight: 400;
+  font-family: var(--font-hand);
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  background: transparent;
+}
+
+.shepherd-cancel-icon:hover {
+  color: var(--accent-secondary);
+  opacity: 1;
+  background: var(--bg-tertiary);
+  border-color: var(--border-primary);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Content area */
+.shepherd-text {
+  padding: 24px 24px 16px 24px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+/* Custom content styling - Hand-drawn feel */
+.shepherd-content-custom h3 {
+  font-family: var(--font-hand);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--accent-primary);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  position: relative;
+  display: inline-block;
+}
+
+/* Underline scribble effect for headings */
+.shepherd-content-custom h3::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-secondary) 0%, transparent 100%);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+.shepherd-content-custom p {
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.shepherd-content-custom ul {
+  margin: 14px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.shepherd-content-custom li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Sketchy bullet points */
+.shepherd-content-custom li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent-secondary);
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Alternating bullet styles for variety */
+.shepherd-content-custom li:nth-child(2n)::before {
+  content: '◆';
+  font-size: 0.6rem;
+  top: 2px;
+}
+
+.shepherd-content-custom li:nth-child(3n)::before {
+  content: '→';
+  font-size: 0.85rem;
+  top: -1px;
+}
+
+.shepherd-content-custom strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  background: linear-gradient(180deg, transparent 60%, rgba(105, 101, 219, 0.15) 60%);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.shepherd-content-custom em {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.825rem;
+}
+
+/* Footer / Buttons area - Sketchy divider */
+.shepherd-footer {
+  padding: 14px 24px 20px 24px;
+  border-top: none;
+  margin-top: 8px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  position: relative;
+}
+
+/* Hand-drawn divider line */
+.shepherd-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg,
+      var(--border-primary) 0px,
+      var(--border-primary) 8px,
+      transparent 8px,
+      transparent 12px);
+  opacity: 0.5;
+}
+
+/* Primary button - Sketchy filled button */
+.shepherd-button {
+  background: var(--accent-primary);
+  border: 2px solid var(--accent-primary);
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  padding: 10px 20px;
+  transition: all 0.15s ease;
+  box-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.shepherd-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    4px 4px 0 rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: var(--accent-primary);
+  filter: brightness(1.1);
+}
+
+.shepherd-button:active {
+  transform: translate(1px, 1px);
+  box-shadow:
+    1px 1px 0 rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Secondary button (Back, Skip) - Sketchy outline button */
+.shepherd-button.shepherd-button-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  box-shadow: none;
+  border: 2px solid var(--border-secondary);
+  font-weight: 600;
+}
+
+.shepherd-button.shepherd-button-secondary:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.shepherd-button.shepherd-button-secondary:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* Progress indicator styling */
+.shepherd-progress {
+  background: var(--bg-tertiary);
+  height: 4px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+
+.shepherd-progress-bar {
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Highlight effect for focused elements - Sketchy pulse */
+.shepherd-target-click-disabled.shepherd-target {
+  pointer-events: none;
+}
+
+.shepherd-target {
+  outline: 3px dashed var(--accent-primary) !important;
+  outline-offset: 6px;
+  border-radius: 8px;
+  animation: shepherd-sketchy-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes shepherd-sketchy-pulse {
+
+  0%,
+  100% {
+    outline-color: var(--accent-primary);
+    outline-offset: 6px;
+    outline-style: dashed;
+  }
+
+  50% {
+    outline-color: var(--accent-secondary);
+    outline-offset: 8px;
+    outline-style: dotted;
+  }
+}
+
+/* Entrance animation for tour cards */
+.shepherd-element {
+  animation: shepherd-card-enter 0.3s ease-out;
+}
+
+@keyframes shepherd-card-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Mobile responsive tour */
+@media (max-width: 768px) {
+  .shepherd-element {
+    max-width: calc(100vw - 24px);
+    margin: 0 12px;
+    border-radius: 10px;
+  }
+
+  .shepherd-element::before {
+    inset: -3px;
+    border-radius: 14px;
+  }
+
+  .shepherd-text {
+    padding: 20px 18px 14px 18px;
+    font-size: 0.85rem;
+  }
+
+  .shepherd-content-custom h3 {
+    font-size: 1.35rem;
+  }
+
+  .shepherd-content-custom p,
+  .shepherd-content-custom li {
+    font-size: 0.825rem;
+  }
+
+  .shepherd-footer {
+    padding: 12px 18px 18px 18px;
+    flex-wrap: wrap;
+  }
+
+  .shepherd-footer::before {
+    left: 18px;
+    right: 18px;
+  }
+
+  .shepherd-button {
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    flex: 1;
+    text-align: center;
+    min-width: 70px;
+  }
+
+  .shepherd-target {
+    outline-width: 2px;
+    outline-offset: 4px;
   }
 }

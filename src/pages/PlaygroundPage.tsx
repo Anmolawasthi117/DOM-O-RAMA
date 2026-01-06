@@ -10,6 +10,7 @@ import { CodePlayground } from '../components/CodePlayground';
 import { StatsPanel } from '../components/StatsPanel';
 import { FrameworkSelector } from '../components/FrameworkSelector';
 import { VNodeRenderer } from '../components/VNodeRenderer';
+import { PlaygroundTour, TourButton } from '../components/PlaygroundTour';
 import { scenarios, type Scenario } from '../utils/scenarios';
 import { 
   Activity, Home, Sun, Moon, Code, 
@@ -138,6 +139,7 @@ export const PlaygroundPage: FC = () => {
   }, [oldTree, newTree]);
 
   return (
+    <PlaygroundTour>
     <div className="h-screen w-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 pattern-dots opacity-30 pointer-events-none z-0" />
@@ -169,13 +171,14 @@ export const PlaygroundPage: FC = () => {
               <p className="text-[10px] md:text-xs text-[var(--text-muted)] hidden md:block">Visualize VDOM diffing in real-time</p>
             </div>
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden lg:block" id="tour-framework-selector">
             <FrameworkSelector />
           </div>
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
           {/* Mode Switcher - Compact on mobile */}
+          <div id="tour-mode-switcher">
           <div className="flex bg-[var(--bg-card)] p-1 rounded-xl sketchy-border shadow-ink">
             <button 
               onClick={() => setMode('code')} 
@@ -196,8 +199,9 @@ export const PlaygroundPage: FC = () => {
               <span className="hidden md:inline ml-1">Interact</span>
             </button>
           </div>
+          </div>
 
-          <div className="hidden md:block">
+          <div className="hidden md:block" id="tour-simulation-controls">
             <SimulationControls 
               isPlaying={isPlaying} 
               onPlay={startSimulation} 
@@ -208,7 +212,9 @@ export const PlaygroundPage: FC = () => {
             />
           </div>
           
-          <button onClick={toggleAppTheme} className="p-2 md:p-3 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish">
+          <TourButton />
+          
+          <button id="tour-theme-toggle" onClick={toggleAppTheme} className="p-2 md:p-3 rounded-xl sketchy-border bg-[var(--bg-card)] shadow-ink btn-squish">
             {appTheme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-600" />}
           </button>
           
@@ -325,7 +331,7 @@ export const PlaygroundPage: FC = () => {
       <main className="relative z-10 flex-1 flex min-h-0 overflow-hidden">
         
         {/* LEFT PANEL: Desktop only */}
-        <div className="hidden md:flex w-72 lg:w-80 shrink-0 flex-col border-r border-[var(--border-primary)] bg-[var(--bg-card)]">
+        <div id="tour-scenarios-panel" className="hidden md:flex w-72 lg:w-80 shrink-0 flex-col border-r border-[var(--border-primary)] bg-[var(--bg-card)]">
           <div className="p-4 border-b border-[var(--border-primary)] flex items-center gap-2">
             {mode === 'code' ? <Code size={18} style={{ color: theme.primary }} /> : <PlayCircle size={18} style={{ color: theme.primary }} />}
             <span className="font-bold text-sm">{mode === 'code' ? 'Code Editor' : 'Scenarios'}</span>
@@ -363,7 +369,7 @@ export const PlaygroundPage: FC = () => {
         </div>
 
         {/* CENTER PANEL: Visualizer + Live Preview */}
-        <div className="flex-1 flex flex-col min-w-0 bg-[var(--bg-secondary)] relative">
+        <div id="tour-tree-visualizer" className="flex-1 flex flex-col min-w-0 bg-[var(--bg-secondary)] relative">
           
           {/* Live Preview Bar (Interact Mode Only) */}
           <AnimatePresence>
@@ -374,7 +380,7 @@ export const PlaygroundPage: FC = () => {
                 exit={{ opacity: 0, y: -20 }}
                 className="shrink-0 p-2 md:p-4 border-b border-[var(--border-primary)] bg-[var(--bg-primary)] flex justify-center z-10"
               >
-                <div className="w-full max-w-md bg-white text-black rounded-xl sketchy-border shadow-float p-3 md:p-4 relative">
+                <div id="tour-live-preview" className="w-full max-w-md bg-white text-black rounded-xl sketchy-border shadow-float p-3 md:p-4 relative">
                    <div className="absolute -top-3 left-3 bg-[var(--accent-primary)] text-white px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase">
                      Tap to Trigger
                    </div>
@@ -425,8 +431,10 @@ export const PlaygroundPage: FC = () => {
             <span className="font-bold text-sm">Analysis</span>
           </div>
           <div className="flex-1 overflow-auto p-4 space-y-4">
-            <StatsPanel stats={stats} />
-            <div className="flex-1 min-h-[300px] rounded-xl sketchy-border overflow-hidden shadow-ink bg-[var(--bg-card)]">
+            <div id="tour-stats-panel">
+              <StatsPanel stats={stats} />
+            </div>
+            <div id="tour-step-log" className="flex-1 min-h-[300px] rounded-xl sketchy-border overflow-hidden shadow-ink bg-[var(--bg-card)]">
               <StepLog steps={logs as any} />
             </div>
           </div>
@@ -434,5 +442,6 @@ export const PlaygroundPage: FC = () => {
 
       </main>
     </div>
+    </PlaygroundTour>
   );
 };
